@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nuM-Iu-nE0">
+                                <rect key="frame" x="141.5" y="385" width="92" height="30"/>
+                                <state key="normal" title="自动重试下载"/>
+                                <connections>
+                                    <action selector="retryDownload:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BO8-u3-4xZ"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zzN-yn-zTR">
+                                <rect key="frame" x="67.5" y="96" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="KNf-lR-Dd3"/>
+                                    <constraint firstAttribute="height" constant="128" id="mhI-VP-abx"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9C-cO-9Ue">
+                                <rect key="frame" x="156.5" y="318.5" width="62" height="30"/>
+                                <state key="normal" title="普通下载"/>
+                                <connections>
+                                    <action selector="normalDownload:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dkc-nU-HCv"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="C9C-cO-9Ue" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Eyk-88-VRx"/>
+                            <constraint firstItem="nuM-Iu-nE0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OYM-6g-vzW"/>
+                            <constraint firstItem="zzN-yn-zTR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="76" id="Rzr-Ar-6dc"/>
+                            <constraint firstItem="zzN-yn-zTR" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="W8h-8B-H6J"/>
+                            <constraint firstItem="nuM-Iu-nE0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="1.2" id="dPs-8B-dDn"/>
+                            <constraint firstItem="C9C-cO-9Ue" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fVL-WT-FEF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="zzN-yn-zTR" id="NdT-UO-AyL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
