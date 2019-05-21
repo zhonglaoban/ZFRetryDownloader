@@ -11,6 +11,7 @@
 
 static dispatch_once_t onceToken;
 static id instance;
+#define kTimeOut 6
 
 @implementation ZFDownloader
 
@@ -33,43 +34,51 @@ static id instance;
     }
     return instance;
 }
--(void)downloadFileWithUrl:(NSString* _Nonnull)url savedPath:(NSString* _Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^ _Nullable )(NSURL * _Nonnull location))success failure:(void (^ _Nonnull )(NSError * _Nonnull error))failure {
+- (void)downloadFileWithUrl:(NSString *_Nonnull)url savedPath:(NSString *_Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^_Nullable)(NSURL *_Nonnull location))success failure:(void (^_Nonnull)(NSError *_Nonnull error))failure {
     ZFTaskDelegate *delegate = [[ZFTaskDelegate alloc] init];
     delegate.recievedProgressBlock = progressBlock;
     delegate.downloadSuccessfulBlock = success;
     delegate.downloadFailedBlock = failure;
     delegate.savePath = savedPath;
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:delegate delegateQueue:[NSOperationQueue mainQueue]];
+
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.timeoutIntervalForRequest = kTimeOut;
+    config.timeoutIntervalForResource = kTimeOut;
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:delegate delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDownloadTask *task = [session downloadTaskWithURL:[NSURL URLWithString:url]];
     [task resume];
 }
-- (void)retryDownloadFileWithUrls:(NSArray<NSString *> *)urls savedPath:(NSString* _Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^ _Nullable )(NSURL * _Nonnull location))successBlock failure:(void (^ _Nonnull )(NSError * _Nonnull error))failureBlock {
+- (void)downloadFileWithRetryUrls:(NSArray<NSString *> *)urls savedPath:(NSString *_Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^_Nullable)(NSURL *_Nonnull location))successBlock failure:(void (^_Nonnull)(NSError *_Nonnull error))failureBlock {
     __block BOOL shouldRetry = YES;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
     dispatch_async(dispatch_queue_create("com.zf.retryDownloadFileWithUrls", DISPATCH_QUEUE_SERIAL), ^{
         for (NSString *url in urls) {
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, kTimeOut * NSEC_PER_SEC));
             if (shouldRetry == NO) {
                 dispatch_semaphore_signal(semaphore);
                 return;
             }
-            [self downloadFileWithUrl:url savedPath:savedPath progress:^(float progress) {
-                if (progressBlock) {
-                    progressBlock(progress);
+            [self downloadFileWithUrl:url
+                savedPath:savedPath
+                progress:^(float progress) {
+                    if (progressBlock) {
+                        progressBlock(progress);
+                    }
                 }
-            } success:^(NSURL * _Nonnull location) {
-                shouldRetry = NO;
-                dispatch_semaphore_signal(semaphore);
-                if (successBlock) {
-                    successBlock(location);
+                success:^(NSURL *_Nonnull location) {
+                    shouldRetry = NO;
+                    dispatch_semaphore_signal(semaphore);
+                    if (successBlock) {
+                        successBlock(location);
+                    }
                 }
-            } failure:^(NSError * _Nonnull error) {
-                dispatch_semaphore_signal(semaphore);
-                if (failureBlock) {
-                    failureBlock(error);
-                }
-            }];
+                failure:^(NSError *_Nonnull error) {
+                    dispatch_semaphore_signal(semaphore);
+                    if (failureBlock) {
+                        failureBlock(error);
+                    }
+                }];
         }
     });
 }

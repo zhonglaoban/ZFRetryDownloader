@@ -29,7 +29,7 @@
 - (IBAction)retryDownload:(id)sender {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *savedPath = [paths objectAtIndex:0];
-    [[ZFDownloader shared] retryDownloadFileWithUrls:self.retryUrls savedPath:savedPath progress:^(float progress) {
+    [[ZFDownloader shared] downloadFileWithRetryUrls:self.retryUrls savedPath:savedPath progress:^(float progress) {
         NSLog(@"%f", progress);
     } success:^(NSURL * _Nonnull location) {
         self.imageView.image = [UIImage imageWithContentsOfFile:location.path];

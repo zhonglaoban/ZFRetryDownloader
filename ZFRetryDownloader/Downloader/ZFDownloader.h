@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(instancetype)shared;
 -(void)downloadFileWithUrl:(NSString* _Nonnull)url savedPath:(NSString* _Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^ _Nullable )(NSURL * _Nonnull location))success failure:(void (^ _Nonnull )(NSError * _Nonnull error))failure;
-- (void)retryDownloadFileWithUrls:(NSArray<NSString *> *)urls savedPath:(NSString* _Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^ _Nullable )(NSURL * _Nonnull location))successBlock failure:(void (^ _Nonnull )(NSError * _Nonnull error))failureBlock;
+- (void)downloadFileWithRetryUrls:(NSArray<NSString *> *)urls savedPath:(NSString* _Nonnull)savedPath progress:(void (^_Nullable)(float progress))progressBlock success:(void (^ _Nullable )(NSURL * _Nonnull location))successBlock failure:(void (^ _Nonnull )(NSError * _Nonnull error))failureBlock;
 
 @end
 
